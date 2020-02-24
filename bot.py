@@ -24,9 +24,20 @@ def send_text(message):
     elif message.text.lower() == 'я тебя люблю':
         bot.send_sticker(message.chat.id, 'CAADAgADZgkAAnlc4gmfCor5YbYYRAI')
     elif message.text.lower() == 'свет в комнате':
-        response = urllib.request.urlopen('http://10.1.3.12/sec/?pt=7&cmd=get')
+        url = 'http://'+conf.get("light","host")+'/'+conf.get("light","password")+'/?pt='+conf.get("light","light1")+'&cmd=get'
+        print(url)
+        response = urllib.request.urlopen(url)
         result = response.read()
         print(result)
+        bot.send_message(message.chat.id, result)
+    elif message.text.lower() == 'температура в помещении':
+        url = 'http://'+conf.get("temperature","host")+'/'+conf.get("temperature","password")+'/?pt='+conf.get("temperature","port")+'&cmd=list'
+        print(url)
+        response = urllib.request.urlopen(url)
+        result = response.read()
+        print(result)
+        for pair in result.decode().split(';'):
+            print (pair)
         bot.send_message(message.chat.id, result)
 
 @bot.message_handler(content_types=['sticker'])
